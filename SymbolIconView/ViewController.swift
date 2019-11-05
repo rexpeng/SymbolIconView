@@ -18,9 +18,12 @@ class ViewController: UIViewController {
     }
 
     private func initView() {
-        let circleView = SymbolIconView(frame: CGRect(x: 10, y: 50, width: 100, height: 100), symbolType: .error)
-        view.addSubview(circleView)
-        circleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClick)))
+        let xView = SymbolIconView(frame: CGRect(x: 10, y: 50, width: 100, height: 100), symbolType: .error, animation: false)
+        xView.circleBackgroundColor = .black
+        //xView.circleBorderColor = .black
+        xView.symbolColor = .white
+        view.addSubview(xView)
+        xView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClick)))
         let question = SymbolIconView(frame: CGRect(x: 10, y: 200, width: 100, height: 100), symbolType: .question)
         view.addSubview(question)
         question.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClick)))
@@ -30,6 +33,7 @@ class ViewController: UIViewController {
         let check = SymbolIconView(frame: CGRect(x: 160, y: 200, width: 100, height: 100), symbolType: .checkmark)
         view.addSubview(check)
         check.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClick)))
+        check.circleBorderColor = .red
     }
 
     @objc func viewClick(_ sender: UITapGestureRecognizer) {

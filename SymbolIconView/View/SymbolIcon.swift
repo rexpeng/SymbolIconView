@@ -26,15 +26,45 @@ class SymbolIconView: UIView {
     private var radius: CGFloat {
         return min(width*0.5, height*0.5)
     }
-    private var viewSymbolType: SymbolType = .checkmark
-    private var isAnimation: Bool = true
-    private var viewLineWidth: CGFloat = 4
+    var viewSymbolType: SymbolType = .checkmark {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    var isAnimation: Bool = true {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    var viewLineWidth: CGFloat = 4 {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    var circleBackgroundColor: UIColor = .clear {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    var circleBorderColor: UIColor = .black {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    var symbolColor: UIColor = .black {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
     
-    init(frame: CGRect, symbolType: SymbolType, animation: Bool = true, lineWidth: CGFloat = 4) {
+    init(frame: CGRect, symbolType: SymbolType, circleBackgroundColor: UIColor = .clear, circleBorderColor: UIColor = .black, symbolColor: UIColor = .black, animation: Bool = true, lineWidth: CGFloat = 4) {
         super.init(frame: frame)
         self.viewSymbolType = symbolType
         self.isAnimation = animation
         self.viewLineWidth = lineWidth
+        self.circleBackgroundColor = circleBackgroundColor
+        self.circleBorderColor = circleBorderColor
+        self.symbolColor = symbolColor
     }
     
     required init?(coder: NSCoder) {
@@ -44,28 +74,28 @@ class SymbolIconView: UIView {
     override func draw(_ rect: CGRect) {
         layer.sublayers = nil
         
-        drawChecSymbol(symbolType: viewSymbolType, lineWidth: viewLineWidth, animation: isAnimation)
+        drawSymbol(symbolType: viewSymbolType, lineWidth: viewLineWidth, animation: isAnimation)
     }
     
     func reDraw() {
         setNeedsDisplay()
     }
     
-    private func drawChecSymbol(symbolType: SymbolType, strokeColor: CGColor = UIColor.black.cgColor, lineWidth: CGFloat = 4, animation: Bool = true, repeatCount: Float = 1, duration: CFTimeInterval = 1) {
-        let circle = circleLayer(strokeColor: strokeColor, lineWidth: lineWidth)
+    private func drawSymbol(symbolType: SymbolType, lineWidth: CGFloat = 4, animation: Bool = true, repeatCount: Float = 1, duration: CFTimeInterval = 1) {
+        let circle = circleLayer(fillColor: circleBackgroundColor.cgColor, strokeColor: circleBorderColor.cgColor, lineWidth: lineWidth)
         var symbol : CAShapeLayer
         switch symbolType {
         case .checkmark:
-            symbol = checkMarkLayer(strokeColor: strokeColor, lineWidth: lineWidth)
+            symbol = checkMarkLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         case .error:
-            symbol = xSymbolLayer(strokeColor: strokeColor, lineWidth: lineWidth)
+            symbol = xSymbolLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         case .exclamation:
-            symbol = exclamationLayer(strokeColor: strokeColor, lineWidth: lineWidth)
+            symbol = exclamationLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         case .question:
-            symbol = questionLayer(strokeColor: strokeColor, lineWidth: lineWidth)
+            symbol = questionLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         }
-        let _animation = strokeAnimation(repeatCount: repeatCount, duration: duration)
         if animation {
+            let _animation = strokeAnimation(repeatCount: repeatCount, duration: duration)
             CATransaction.begin()
             CATransaction.setCompletionBlock {
                 symbol.add(_animation, forKey: nil)
@@ -152,9 +182,9 @@ class SymbolIconView: UIView {
         return layer
     }
     
-    private func circleLayer(/*fillColor: CGColor = UIColor.clear.cgColor,*/ strokeColor: CGColor = UIColor.black.cgColor, lineWidth: CGFloat = 1) -> CAShapeLayer {
+    private func circleLayer(fillColor: CGColor = UIColor.clear.cgColor, strokeColor: CGColor = UIColor.black.cgColor, lineWidth: CGFloat = 1) -> CAShapeLayer {
         
-        let circleLayer = shapLayer(/*fillColor: fillColor,*/ strokeColor: strokeColor, lineWidth: lineWidth)
+        let circleLayer = shapLayer(fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth)
         circleLayer.path = circlePath()
         
         return circleLayer

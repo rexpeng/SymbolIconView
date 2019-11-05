@@ -299,7 +299,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6VMACRJDJ6;
-				INFOPLIST_FILE = animationview/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SymbolIconView/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -320,7 +320,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 6VMACRJDJ6;
-				INFOPLIST_FILE = animationview/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SymbolIconView/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
