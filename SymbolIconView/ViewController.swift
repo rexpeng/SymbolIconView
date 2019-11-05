@@ -22,6 +22,7 @@ class ViewController: UIViewController {
         xView.circleBackgroundColor = .black
         //xView.circleBorderColor = .black
         xView.symbolColor = .white
+        xView.tag = 1234
         view.addSubview(xView)
         xView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewClick)))
         let question = SymbolIconView(frame: CGRect(x: 10, y: 200, width: 100, height: 100), symbolType: .question)

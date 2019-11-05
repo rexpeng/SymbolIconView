@@ -82,31 +82,32 @@ class SymbolIconView: UIView {
     }
     
     private func drawSymbol(symbolType: SymbolType, lineWidth: CGFloat = 4, animation: Bool = true, repeatCount: Float = 1, duration: CFTimeInterval = 1) {
-        let circle = circleLayer(fillColor: circleBackgroundColor.cgColor, strokeColor: circleBorderColor.cgColor, lineWidth: lineWidth)
-        var symbol : CAShapeLayer
+        let borderLayer = circleLayer(fillColor: circleBackgroundColor.cgColor, strokeColor: circleBorderColor.cgColor, lineWidth: lineWidth)
+        //let borderLayer = triangleLayer(fillColor: circleBackgroundColor.cgColor, strokeColor: circleBorderColor.cgColor, lineWidth: lineWidth)
+        var symbolLayer : CAShapeLayer
         switch symbolType {
         case .checkmark:
-            symbol = checkMarkLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
+            symbolLayer = checkMarkLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         case .error:
-            symbol = xSymbolLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
+            symbolLayer = xSymbolLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         case .exclamation:
-            symbol = exclamationLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
+            symbolLayer = exclamationLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         case .question:
-            symbol = questionLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
+            symbolLayer = questionLayer(strokeColor: symbolColor.cgColor, lineWidth: lineWidth)
         }
         if animation {
             let _animation = strokeAnimation(repeatCount: repeatCount, duration: duration)
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                symbol.add(_animation, forKey: nil)
-                self.layer.addSublayer(symbol)
+                symbolLayer.add(_animation, forKey: nil)
+                self.layer.addSublayer(symbolLayer)
             }
-            circle.add(_animation, forKey: nil)
-            layer.addSublayer(circle)
+            borderLayer.add(_animation, forKey: nil)
+            layer.addSublayer(borderLayer)
             CATransaction.commit()
         } else {
-            layer.addSublayer(circle)
-            layer.addSublayer(symbol)
+            layer.addSublayer(borderLayer)
+            layer.addSublayer(symbolLayer)
         }
     }
     
@@ -114,6 +115,15 @@ class SymbolIconView: UIView {
         //let radius = min(width*0.5, height*0.5)
         let circle = UIBezierPath(arcCenter: viewCenter, radius: radius, startAngle: getAngle(angle: 0), endAngle: getAngle(angle: 359.9999), clockwise: true)
         return circle.cgPath
+    }
+    
+    private func triAnglePath() -> CGPath {
+        let triangle = UIBezierPath()
+        triangle.move(to: CGPoint(x: width*0.5, y: 0))
+        triangle.addLine(to: CGPoint(x: 0, y: height))
+        triangle.addLine(to: CGPoint(x: width, y: height))
+        triangle.addLine(to: CGPoint(x: width*0.5, y: 0))
+        return triangle.cgPath
     }
     
     private func checkMarkPath() -> CGPath {
@@ -180,6 +190,13 @@ class SymbolIconView: UIView {
         layer.lineCap = lineCap
         layer.lineJoin = .round
         return layer
+    }
+    
+    private func triangleLayer(fillColor: CGColor = UIColor.clear.cgColor, strokeColor: CGColor = UIColor.black.cgColor, lineWidth: CGFloat = 1) -> CAShapeLayer {
+        let triangleLayer = shapLayer(fillColor: fillColor, strokeColor: strokeColor, lineWidth: lineWidth)
+        triangleLayer.path = triAnglePath()
+        
+        return triangleLayer
     }
     
     private func circleLayer(fillColor: CGColor = UIColor.clear.cgColor, strokeColor: CGColor = UIColor.black.cgColor, lineWidth: CGFloat = 1) -> CAShapeLayer {
